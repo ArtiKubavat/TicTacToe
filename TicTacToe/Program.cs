@@ -1,5 +1,6 @@
 ﻿using System;
 using Ninject;
+
 using TicTacToe.Constants;
 using TicTacToe.Interfaces;
 
@@ -44,8 +45,8 @@ namespace TicTacToe
 							case GameState.InValid:
 								Console.WriteLine("Oops that spot is taken. Try again");
 								continue;
-							case GameState.Tie:
-								Console.WriteLine("There's a tie");
+							case GameState.Draw:
+								Console.WriteLine("There's a Draw");
 								ReplayGame();
 								break;
 							case GameState.NotFinished:
@@ -81,7 +82,6 @@ namespace TicTacToe
 				ReplayGame();
 			}
 		}
-
 
 
 		private static void InitServices()

@@ -1,6 +1,6 @@
 ﻿namespace TicTacToe.Constants
 {
-	class GameConstants
+	public class GameConstants
 	{
 		public const int BOARD_SIZE = 3;
 		public const string PLAYER1 = "Player 1";

@@ -1,18 +1,16 @@
 ﻿using System;
 using TicTacToe.Constants;
-using TicTacToe.Entity;
 using TicTacToe.Interfaces;
 
 namespace TicTacToe.Services
 {
-	class BoardService : IBoardService
+	public class BoardService : IBoardService
 	{
-		private string[,] _board;
+		public string[,] _board;
 
 		public BoardService()
 		{
 			_board = InitialiseBoard(GameConstants.BOARD_SIZE);
-
 		}
 
 		public string[,] InitialiseBoard(int size)

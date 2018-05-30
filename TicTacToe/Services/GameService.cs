@@ -6,13 +6,13 @@ using TicTacToe.Interfaces;
 
 namespace TicTacToe.Services
 {
-	class GameService : IGameService
+	public class GameService : IGameService
 	{
 		private static IBoardService _boardService;
-		private static string[,] _gameBoard;
-		private Player _currentPlayer;
+		public string[,] _gameBoard;
+		public Player _currentPlayer;
 
-		Dictionary<string, int> dictionary = new Dictionary<string, int>();
+		public Dictionary<string, int> _defaultCoordValues = new Dictionary<string, int>();
 
 		public GameService(IBoardService boardService)
 		{
@@ -23,7 +23,7 @@ namespace TicTacToe.Services
 
 		public void SetDefaultValuesForCoodinates()
 		{
-			dictionary = new Dictionary<string, int>
+			_defaultCoordValues = new Dictionary<string, int>
 			{
 				{ GameConstants.DEFAULT_SIGN, 0 },
 				{ GameConstants.PLAYER1_SIGN, 1 },
@@ -49,7 +49,6 @@ namespace TicTacToe.Services
 		{
 			try
 			{
-
 				if (nextMove != GameConstants.GIVEUP && !nextMove.Contains(","))
 				{
 					return InvalidInputMessage();
@@ -99,21 +98,21 @@ namespace TicTacToe.Services
 		public GameState CheckGameState()
 		{
 			var gameState = CheckRowWin();
-			if (gameState != GameState.NotFinished)
+			if (gameState == GameState.Win)
 			{
 				return gameState;
 			}
 
 			gameState = CheckColumnWin();
-			if (gameState != GameState.NotFinished)
+			if (gameState == GameState.Win)
 			{
 				return gameState;
 			}
 
 			gameState = CheckDiagonal();
 
-			if (gameState != GameState.Win)
-				gameState = CheckTie();
+			if (gameState == GameState.NotFinished)
+				gameState = CheckDraw();
 
 			_currentPlayer = _currentPlayer.PlayerName == GameConstants.PLAYER1 && gameState == GameState.NotFinished
 				? SetCurrentPlayer(GameConstants.PLAYER2)
@@ -122,7 +121,7 @@ namespace TicTacToe.Services
 			return gameState;
 		}
 
-		private GameState CheckTie()
+		private GameState CheckDraw()
 		{
 			for (int i = 0; i < 3; i++)
 			{
@@ -134,7 +133,7 @@ namespace TicTacToe.Services
 					}
 				}
 			}
-			return GameState.Tie;
+			return GameState.Draw;
 		}
 
 		private GameState CheckDiagonal()
@@ -153,9 +152,14 @@ namespace TicTacToe.Services
 			var sum = 0;
 			for (int i = 0; i < 3; i++)
 			{
-				sum += dictionary[_gameBoard[i, 2 - i]];
+				sum += _defaultCoordValues[_gameBoard[i, 2 - i]];
 			}
 
+			return ReturnGameState(sum);
+		}
+
+		public static GameState ReturnGameState(int sum)
+		{
 			switch (sum)
 			{
 				case 3:
@@ -172,18 +176,10 @@ namespace TicTacToe.Services
 			var sum = 0;
 			for (int i = 0; i < 3; i++)
 			{
-				sum += dictionary[_gameBoard[i, i]];
-			}
-			switch (sum)
-			{
-				case 3:
-					return GameState.Win;
-				case -3:
-					return GameState.Win;
-				default:
-					return GameState.NotFinished;
+				sum += _defaultCoordValues[_gameBoard[i, i]];
 			}
 
+			return ReturnGameState(sum);
 		}
 
 		private GameState CheckColumnWin()
@@ -194,15 +190,10 @@ namespace TicTacToe.Services
 
 				for (int j = 0; j < 3; j++)
 				{
-					sum += dictionary[_gameBoard[j, i]];
+					sum += _defaultCoordValues[_gameBoard[j, i]];
 				}
-				switch (sum)
-				{
-					case 3:
-						return GameState.Win;
-					case -3:
-						return GameState.Win;
-				}
+
+				return ReturnGameState(sum);
 			}
 			return GameState.NotFinished;
 		}
@@ -215,15 +206,10 @@ namespace TicTacToe.Services
 
 				for (int j = 0; j < 3; j++)
 				{
-					sum += dictionary[_gameBoard[i, j]];
+					sum += _defaultCoordValues[_gameBoard[i, j]];
 				}
-				switch (sum)
-				{
-					case 3:
-						return GameState.Win;
-					case -3:
-						return GameState.Win;
-				}
+
+				return ReturnGameState(sum);
 			}
 			return GameState.NotFinished;
 		}

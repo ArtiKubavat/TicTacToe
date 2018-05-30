@@ -1,9 +1,9 @@
 ﻿namespace TicTacToe.Constants
 {
-	enum GameState
+	public enum GameState
 	{
 		Win,
-		Tie,
+		Draw,
 		NotFinished,
 		InValid,
 		GiveUp

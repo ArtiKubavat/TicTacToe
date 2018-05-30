@@ -2,7 +2,7 @@
 
 namespace TicTacToe.Interfaces
 {
-	interface IBoardService
+	public interface IBoardService
 	{
 		string[,] GetCurrentBoard();
 		void UpdateAndPrintBoard(string [,] board);
