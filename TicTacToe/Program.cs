@@ -1,6 +1,6 @@
 ﻿using System;
 using Ninject;
-
+using NLog;
 using TicTacToe.Constants;
 using TicTacToe.Interfaces;
 
@@ -9,6 +9,7 @@ namespace TicTacToe
 	class Program
 	{
 		private static IGameService _gameService;
+		private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
 		static void Main(string[] args)
 		{
@@ -57,8 +58,8 @@ namespace TicTacToe
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e);
-				throw;
+				Logger.Error(e);
+				Console.WriteLine("Ooops something went wrong. Please look at he log below \n"+ e);
 			}
 		}
 

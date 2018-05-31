@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using NLog;
+
 using TicTacToe.Constants;
 using TicTacToe.Entity;
 using TicTacToe.Interfaces;
@@ -13,6 +15,7 @@ namespace TicTacToe.Services
 		public Player _currentPlayer;
 
 		public Dictionary<string, int> _defaultCoordValues = new Dictionary<string, int>();
+		private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
 		public GameService(IBoardService boardService)
 		{
@@ -71,12 +74,12 @@ namespace TicTacToe.Services
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("InValid input " + e);
-				throw;
+				Logger.Error(e);
+				return InvalidInputMessage();
 			}
 		}
 
-		private static Tuple<int, int> InvalidInputMessage()
+		public Tuple<int, int> InvalidInputMessage()
 		{
 			Console.WriteLine("Oops! Invalid input. Please try again...");
 			return new Tuple<int, int>(-1, -1);
